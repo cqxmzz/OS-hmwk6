@@ -10,7 +10,7 @@
  */
 
 #include <sys/syscall.h>
-
+#include <unistd.h>
 struct gps_location {
 	double	latitude;
 	double	longitude;
