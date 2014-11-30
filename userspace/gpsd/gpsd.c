@@ -73,11 +73,11 @@ static int poll_gps_data()
 
 int main(int argc, char *argv[])
 {
-	daemon_mode();
-//	while(1) {
+//	daemon_mode();
+	while(1) {
 		poll_gps_data();
-//		usleep(1000);
-//	}
+		usleep(1000);
+	}
 	return 0;
 }
 

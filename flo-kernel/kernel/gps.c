@@ -27,7 +27,7 @@ SYSCALL_DEFINE1(set_gps_location, struct gps_location __user *, loc)
 	return 0;
 }
 
-/* Cai Yuannan */
+/* Cai Yuannan 
 SYSCALL_DEFINE2(get_gps_location, const char __user *, pathname,
 struct gps_location __user *, loc)
 {
@@ -70,4 +70,4 @@ struct gps_location __user *, loc)
 		return -EFAULT;
 
 	return coord_age;
-}
+}*/
