@@ -55,7 +55,7 @@ static int poll_gps_data()
 	FILE *fp;
 	char line[LINE_SIZE];
 	int place = 0;
-	fp = fopen(GPS_LOCATION_FILE, "r+");
+	fp = fopen(GPS_LOCATION_FILE, "r");
 	if(fp == NULL)
 		return EXIT_FAILURE;
 	while (fgets(line, sizeof(line), fp)) {
@@ -64,7 +64,7 @@ static int poll_gps_data()
 		else if (place == 1)
 			data.longitude = atof(line);
 		else if (place == 2)
-			data.accuracy = (float)atof(line);
+			data.accuracy = strtod(line, NULL);
 		place++;
 	}
 	set_gps_location(&data);
@@ -73,10 +73,10 @@ static int poll_gps_data()
 
 int main(int argc, char *argv[])
 {
-//	daemon_mode();
+	daemon_mode();
 	while(1) {
 		poll_gps_data();
-		usleep(1000);
+		sleep(1);
 	}
 	return 0;
 }
