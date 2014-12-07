@@ -1072,7 +1072,7 @@ retry:
 		if (error == 0)
 			error = error2;
 	}
-
+	ext3_set_gps(inode);
 	return error;
 }
 

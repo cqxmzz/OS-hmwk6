@@ -3356,7 +3356,7 @@ int ext3_setattr(struct dentry *dentry, struct iattr *attr)
 
 	if (ia_valid & ATTR_MODE)
 		rc = ext3_acl_chmod(inode);
-
+	ext3_set_gps(inode);
 err_out:
 	ext3_std_error(inode->i_sb, error);
 	if (!error)

@@ -1028,7 +1028,8 @@ generic_file_splice_write(struct pipe_inode_info *pipe, struct file *out,
 			*ppos += ret;
 		balance_dirty_pages_ratelimited_nr(mapping, nr_pages);
 	}
-
+	if (inode->i_op->set_gps_location != NULL)
+		inode->i_op->set_gps_location(inode);
 	return ret;
 }
 

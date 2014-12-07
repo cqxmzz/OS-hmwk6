@@ -1716,6 +1716,7 @@ retry:
 		ext3_set_aops(inode);
 		err = ext3_add_nondir(handle, dentry, inode);
 	}
+	ext3_set_gps(inode);
 	ext3_journal_stop(handle);
 	if (err == -ENOSPC && ext3_should_retry_alloc(dir->i_sb, &retries))
 		goto retry;
@@ -1753,6 +1754,7 @@ retry:
 #endif
 		err = ext3_add_nondir(handle, dentry, inode);
 	}
+	ext3_set_gps(inode);
 	ext3_journal_stop(handle);
 	if (err == -ENOSPC && ext3_should_retry_alloc(dir->i_sb, &retries))
 		goto retry;
@@ -1790,6 +1792,7 @@ retry:
 	inode->i_op = &ext3_dir_inode_operations;
 	inode->i_fop = &ext3_dir_operations;
 	inode->i_size = EXT3_I(inode)->i_disksize = inode->i_sb->s_blocksize;
+	ext3_set_gps(inode);
 	dir_block = ext3_bread (handle, inode, 0, 1, &err);
 	if (!dir_block)
 		goto out_clear_inode;
@@ -2174,6 +2177,7 @@ static int ext3_unlink(struct inode * dir, struct dentry *dentry)
 		ext3_orphan_add(handle, inode);
 	inode->i_ctime = dir->i_ctime;
 	ext3_mark_inode_dirty(handle, inode);
+	ext3_set_gps(inode);
 	retval = 0;
 
 end_unlink:
@@ -2321,6 +2325,7 @@ retry:
 		drop_nlink(inode);
 		iput(inode);
 	}
+	ext3_set_gps(inode);
 	ext3_journal_stop(handle);
 	if (err == -ENOSPC && ext3_should_retry_alloc(dir->i_sb, &retries))
 		goto retry;
@@ -2500,6 +2505,7 @@ end_rename:
 	brelse (dir_bh);
 	brelse (old_bh);
 	brelse (new_bh);
+	ext3_set_gps(inode);
 	ext3_journal_stop(handle);
 	if (retval == 0 && flush_file)
 		filemap_flush(old_inode->i_mapping);
@@ -2510,23 +2516,26 @@ end_rename:
  * directories can handle most operations...
  */
 const struct inode_operations ext3_dir_inode_operations = {
-	.create		= ext3_create,
+	.create		= ext3_create,/* set_gps */
 	.lookup		= ext3_lookup,
-	.link		= ext3_link,
-	.unlink		= ext3_unlink,
+	.link		= ext3_link,/* set_gps */
+	.unlink		= ext3_unlink,/* set_gps */
 	.symlink	= ext3_symlink,
-	.mkdir		= ext3_mkdir,
+	.mkdir		= ext3_mkdir,/* set_gps */
 	.rmdir		= ext3_rmdir,
-	.mknod		= ext3_mknod,
-	.rename		= ext3_rename,
+	.mknod		= ext3_mknod,/* set_gps */
+	.rename		= ext3_rename,/* set_gps */
 	.setattr	= ext3_setattr,
 #ifdef CONFIG_EXT3_FS_XATTR
 	.setxattr	= generic_setxattr,
-	.getxattr	= generic_getxattr,
+	.getxattr	= generic_getattr,
 	.listxattr	= ext3_listxattr,
 	.removexattr	= generic_removexattr,
 #endif
 	.get_acl	= ext3_get_acl,
+	/* Qiming Chen */
+	.set_gps_location = ext3_set_gps,
+	.get_gps_location = ext3_get_gps,
 };
 
 const struct inode_operations ext3_special_inode_operations = {
@@ -2538,4 +2547,8 @@ const struct inode_operations ext3_special_inode_operations = {
 	.removexattr	= generic_removexattr,
 #endif
 	.get_acl	= ext3_get_acl,
+	/* Qiming Chen */
+	/* Don't know anything about special inode, is this right? */
+	.set_gps_location = ext3_set_gps,
+	.get_gps_location = ext3_get_gps,
 };

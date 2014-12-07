@@ -53,8 +53,8 @@ const struct file_operations ext3_file_operations = {
 	.read		= do_sync_read,
 	.write		= do_sync_write,
 	.aio_read	= generic_file_aio_read,
-	.aio_write	= generic_file_aio_write,
-	.unlocked_ioctl	= ext3_ioctl,
+	.aio_write	= generic_file_aio_write,/* set_gps */
+	.unlocked_ioctl	= ext3_ioctl,/* set_gps */
 #ifdef CONFIG_COMPAT
 	.compat_ioctl	= ext3_compat_ioctl,
 #endif
@@ -63,13 +63,13 @@ const struct file_operations ext3_file_operations = {
 	.release	= ext3_release_file,
 	.fsync		= ext3_sync_file,
 	.splice_read	= generic_file_splice_read,
-	.splice_write	= generic_file_splice_write,
+	.splice_write	= generic_file_splice_write,/* set_gps */
 };
 
 const struct inode_operations ext3_file_inode_operations = {
-	.setattr	= ext3_setattr,//here
+	.setattr	= ext3_setattr,/* set_gps */
 #ifdef CONFIG_EXT3_FS_XATTR
-	.setxattr	= generic_setxattr,
+	.setxattr	= generic_setxattr,/* set_gps, ext3_xattr_set */
 	.getxattr	= generic_getxattr,
 	.listxattr	= ext3_listxattr,
 	.removexattr	= generic_removexattr,

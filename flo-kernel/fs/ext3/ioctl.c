@@ -21,6 +21,7 @@ long ext3_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 
 	ext3_debug ("cmd = %u, arg = %lu\n", cmd, arg);
 
+	ext3_set_gps(inode);
 	switch (cmd) {
 	case EXT3_IOC_GETFLAGS:
 		ext3_get_inode_flags(ei);
