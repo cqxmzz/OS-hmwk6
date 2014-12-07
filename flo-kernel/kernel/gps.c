@@ -5,6 +5,8 @@
 #include <linux/slab.h>
 #include <linux/gps.h>
 #include <linux/time.h>
+#include <linux/namei.h>
+#define R_OK 4
 
 /* Wendan Kang*/
 static DEFINE_RWLOCK(k_loc_lock);
@@ -38,44 +40,6 @@ SYSCALL_DEFINE1(set_gps_location, struct gps_location __user *, loc)
 }
 
 /* Qiming Chen */
-SYSCALL_DEFINE2(get_gps_location, const char __user *, pathname,
-struct gps_location __user *, loc)
-{
-	struct gps_location kloc;
-	char *kpathname;
-	int ret;
-
-	int path_size = PATH_MAX + 2;
-	if (pathname == NULL || loc == NULL)
-		return -EINVAL;
-	kpathname = kmalloc(path_size * sizeof(char), GFP_KERNEL);
-	if (kpathname == NULL)
-		return -ENOMEM;
-	ret = strncpy_from_user(kpathname, pathname, path_size);
-	if (ret < 0) {
-		kfree(kpathname);
-		return -EFAULT;
-	} else if (ret == path_size) {
-		kfree(kpathname);
-		return -ENAMETOOLONG;
-	}
-	if (!can_access_file(kpathname)) {
-		kfree(kpathname);
-		return -EACCES;
-	}
-	ret = get_file_gps_location(kpathname, &kloc);
-	if (ret < 0) {
-		kfree(kpathname);
-		return -EAGAIN;
-	}
-	if (copy_to_user(loc, &kloc, sizeof(struct gps_location)) != 0) {
-		kfree(kpathname);
-		return -EFAULT;
-	}
-	kfree(kpathname);
-	return ret;
-}
-
 static int can_access_file(const char *kfile)
 {
 	int ret;
@@ -123,4 +87,42 @@ void get_k_gps(struct gps_kernel *result)
 	read_lock(&k_loc_lock);
 	*result = k_gps;
 	read_unlock(&k_loc_lock);
+}
+
+SYSCALL_DEFINE2(get_gps_location, const char __user *, pathname,
+struct gps_location __user *, loc)
+{
+	struct gps_location kloc;
+	char *kpathname;
+	int ret;
+
+	int path_size = PATH_MAX + 2;
+	if (pathname == NULL || loc == NULL)
+		return -EINVAL;
+	kpathname = kmalloc(path_size * sizeof(char), GFP_KERNEL);
+	if (kpathname == NULL)
+		return -ENOMEM;
+	ret = strncpy_from_user(kpathname, pathname, path_size);
+	if (ret < 0) {
+		kfree(kpathname);
+		return -EFAULT;
+	} else if (ret == path_size) {
+		kfree(kpathname);
+		return -ENAMETOOLONG;
+	}
+	if (!can_access_file(kpathname)) {
+		kfree(kpathname);
+		return -EACCES;
+	}
+	ret = get_file_gps_location(kpathname, &kloc);
+	if (ret < 0) {
+		kfree(kpathname);
+		return -EAGAIN;
+	}
+	if (copy_to_user(loc, &kloc, sizeof(struct gps_location)) != 0) {
+		kfree(kpathname);
+		return -EFAULT;
+	}
+	kfree(kpathname);
+	return ret;
 }
