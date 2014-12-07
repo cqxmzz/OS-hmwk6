@@ -31,11 +31,10 @@ SYSCALL_DEFINE1(set_gps_location, struct gps_location __user *, loc)
 SYSCALL_DEFINE2(get_gps_location, const char __user *, pathname,
 struct gps_location __user *, loc)
 {
-	struct gps_location kloc;
 	return 0;
 }
 
-void get_k_gps_location(struct kernel_gps *result)
+void get_k_gps_location(struct gps_location *result)
 {
 	if (result == NULL)
 		return;

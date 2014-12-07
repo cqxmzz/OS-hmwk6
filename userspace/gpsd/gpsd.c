@@ -60,13 +60,16 @@ static int poll_gps_data()
 		return EXIT_FAILURE;
 	while (fgets(line, sizeof(line), fp)) {
 		if (place == 0)
-			data.latitude = atof(line);
+			data.latitude = strtod(line, NULL);
 		else if (place == 1)
-			data.longitude = atof(line);
+			data.longitude = strtod(line, NULL);
 		else if (place == 2)
-			data.accuracy = strtod(line, NULL);
+			data.accuracy = atof(line);
 		place++;
+		if (place > 3) 
+			break;
 	}
+	fclose(fp);
 	set_gps_location(&data);
 	return 0;
 }
@@ -76,8 +79,7 @@ int main(int argc, char *argv[])
 	daemon_mode();
 	while(1) {
 		poll_gps_data();
-		sleep(1);
+		usleep(1000000);
 	}
 	return 0;
 }
-
