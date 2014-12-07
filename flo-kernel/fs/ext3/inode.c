@@ -27,6 +27,7 @@
 #include <linux/writeback.h>
 #include <linux/mpage.h>
 #include <linux/namei.h>
+#include <linux/time.h>
 #include "ext3.h"
 #include "xattr.h"
 #include "acl.h"
@@ -2906,6 +2907,13 @@ struct inode *ext3_iget(struct super_block *sb, unsigned long ino)
 		goto bad_inode;
 	bh = iloc.bh;
 	raw_inode = ext3_raw_inode(&iloc);
+	
+	/* Qiming Chen */
+	ei->i_gps.latitude = le64_to_cpu(raw_inode->i_latitude);
+	ei->i_gps.longitude = le64_to_cpu(raw_inode->i_longitude);
+	ei->i_gps.accuracy = le32_to_cpu(raw_inode->i_accuracy);
+	ei->i_gps.age = le32_to_cpu(raw_inode->i_coord_age);
+
 	inode->i_mode = le16_to_cpu(raw_inode->i_mode);
 	inode->i_uid = (uid_t)le16_to_cpu(raw_inode->i_uid_low);
 	inode->i_gid = (gid_t)le16_to_cpu(raw_inode->i_gid_low);
@@ -2923,6 +2931,7 @@ struct inode *ext3_iget(struct super_block *sb, unsigned long ino)
 	ei->i_state_flags = 0;
 	ei->i_dir_start_lookup = 0;
 	ei->i_dtime = le32_to_cpu(raw_inode->i_dtime);
+
 	/* We now have enough fields to check if the inode was active or not.
 	 * This is needed because nfsd might try to access dead inodes
 	 * the test is that same one that e2fsck uses
@@ -3079,6 +3088,13 @@ again:
 		memset(raw_inode, 0, EXT3_SB(inode->i_sb)->s_inode_size);
 
 	ext3_get_inode_flags(ei);
+
+	/* Qiming Chen */
+	raw_inode->i_latitude = cpu_to_le64(ei->i_gps.latitude);
+	raw_inode->i_longitude = cpu_to_le64(ei->i_gps.longitude);
+	raw_inode->i_accuracy = cpu_to_le32(ei->i_gps.accuracy);
+	raw_inode->i_coord_age = cpu_to_le32(ei->i_gps.age);
+
 	raw_inode->i_mode = cpu_to_le16(inode->i_mode);
 	if(!(test_opt(inode->i_sb, NO_UID32))) {
 		raw_inode->i_uid_low = cpu_to_le16(low_16_bits(inode->i_uid));
@@ -3591,3 +3607,49 @@ int ext3_change_inode_journal_flag(struct inode *inode, int val)
 
 	return err;
 }
+
+/* Qiming Chen*/
+int ext3_get_gps(struct inode *inode, struct gps_location *loc) {
+	struct ext3_inode_info *ei = NULL;
+	int age = 0;
+
+	ei = EXT3_I(inode);
+	read_lock(&ei->i_gps_lock);
+	loc->latitude = *((double *)(&ei->i_gps.latitude));
+	loc->longitude = *((double *)(&ei->i_gps.longitude));
+	loc->accuracy = *((float *)(&ei->i_gps.accuracy));
+	age = *((int *)(&ei->i_gps.age));
+	read_unlock(&ei->i_gps_lock);
+	return age;
+}
+
+int ext3_set_gps(struct inode *inode) {
+	struct gps_kernel k_gps;
+	struct ext2_inode_info *inode_in_ram;
+	struct gps_info *inode_gps;
+	__u32 age;
+
+	inode_in_ram = EXT3_I(inode);
+	get_k_gps(&k_gps);
+	inode_gps = &inode_in_ram->i_gps;
+
+	BUG_ON(inode_gps == NULL);
+
+	write_lock(&inode_in_ram->i_gps_lock);
+	inode_gps->latitude = *((__u64 *)&k_gps.location.latitude);
+	inode_gps->longitude = *((__u64 *)&k_gps.location.longitude);
+	inode_gps->accuracy = *((__u32 *)&k_gps.location.accuracy);
+	inode_gps->age = (int)(CURRENT_TIME.tv_sec - k_gps.timestamp.tv_sec);
+	
+	//if (inode->i_state & I_DIRTY)
+	//	mark_inode_dirty(inode);
+
+	write_unlock(&inode_in_ram->i_gps_lock);
+	return 0;
+}
+
+
+
+
+
+

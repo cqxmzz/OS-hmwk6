@@ -24,6 +24,7 @@
 #include <linux/magic.h>
 #include <linux/bug.h>
 #include <linux/blockgroup_lock.h>
+#include <linux/gps.h>
 
 /*
  * The second extended filesystem constants/structures
@@ -309,6 +310,12 @@ struct ext3_inode {
 	} osd2;				/* OS dependent 2 */
 	__le16	i_extra_isize;
 	__le16	i_pad1;
+	
+	/* Qiming Chen */
+	__le64 i_latitude;
+	__le64 i_longitude;
+	__le32 i_accuracy;
+	__le32 i_coord_age;
 };
 
 #define i_size_high	i_dir_acl
@@ -614,6 +621,9 @@ struct ext3_inode_info {
 	atomic_t i_datasync_tid;
 
 	struct inode vfs_inode;
+	/* Qiming Chen */
+	struct gps_info i_gps;
+	rwlock_t i_gps_lock;
 };
 
 /*
@@ -1058,6 +1068,10 @@ extern void ext3_set_aops(struct inode *inode);
 extern int ext3_fiemap(struct inode *inode, struct fiemap_extent_info *fieinfo,
 		       u64 start, u64 len);
 
+/* inode.c Qiming Chen */
+extern int ext3_get_gps(struct inode *inode, struct gps_location *loc);
+extern int ext3_set_gps(struct inode *inode);
+
 /* ioctl.c */
 extern long ext3_ioctl(struct file *, unsigned int, unsigned long);
 extern long ext3_compat_ioctl(struct file *, unsigned int, unsigned long);
@@ -1067,7 +1081,6 @@ extern int ext3_orphan_add(handle_t *, struct inode *);
 extern int ext3_orphan_del(handle_t *, struct inode *);
 extern int ext3_htree_fill_tree(struct file *dir_file, __u32 start_hash,
 				__u32 start_minor_hash, __u32 *next_hash);
-
 /* resize.c */
 extern int ext3_group_add(struct super_block *sb,
 				struct ext3_new_group_data *input);
