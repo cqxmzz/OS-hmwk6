@@ -13,7 +13,7 @@ static struct gps_kernel k_gps = {
 		.latitude = 0.0,
 		.longitude = 0.0,
 		.accuracy = 0.0
-	}
+	},
 	.timestamp = {
 		.tv_sec = 0,
 		.tv_nsec = 0

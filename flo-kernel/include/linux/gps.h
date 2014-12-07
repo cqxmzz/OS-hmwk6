@@ -1,5 +1,8 @@
 #ifndef GPS_H_
 #define GPS_H_
+
+#include <linux/time.h>
+
 /* Wendan Kang*/
 struct gps_location {
 	double latitude;

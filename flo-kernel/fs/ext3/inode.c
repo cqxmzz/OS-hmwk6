@@ -3625,9 +3625,8 @@ int ext3_get_gps(struct inode *inode, struct gps_location *loc) {
 
 int ext3_set_gps(struct inode *inode) {
 	struct gps_kernel k_gps;
-	struct ext2_inode_info *inode_in_ram;
+	struct ext3_inode_info *inode_in_ram;
 	struct gps_info *inode_gps;
-	__u32 age;
 
 	inode_in_ram = EXT3_I(inode);
 	get_k_gps(&k_gps);
