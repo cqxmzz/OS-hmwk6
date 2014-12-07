@@ -3639,9 +3639,7 @@ int ext3_set_gps(struct inode *inode) {
 	inode_gps->longitude = *((__u64 *)&k_gps.location.longitude);
 	inode_gps->accuracy = *((__u32 *)&k_gps.location.accuracy);
 	inode_gps->age = (int)(CURRENT_TIME.tv_sec - k_gps.timestamp.tv_sec);
-	
-	//if (inode->i_state & I_DIRTY)
-	//	mark_inode_dirty(inode);
+	mark_inode_dirty(inode);
 
 	write_unlock(&inode_in_ram->i_gps_lock);
 	return 0;

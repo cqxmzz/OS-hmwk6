@@ -67,7 +67,7 @@ const struct file_operations ext3_file_operations = {
 };
 
 const struct inode_operations ext3_file_inode_operations = {
-	.setattr	= ext3_setattr,
+	.setattr	= ext3_setattr,//here
 #ifdef CONFIG_EXT3_FS_XATTR
 	.setxattr	= generic_setxattr,
 	.getxattr	= generic_getxattr,
