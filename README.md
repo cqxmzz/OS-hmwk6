@@ -27,7 +27,7 @@ w4118@w4118:~/hmwk6-prog/utils$ ./update-kernel-ram.sh ../flo-kernel/arch/arm/bo
 
 ### 2. Copy File System
 
-It is supposed that the FS has been created, if not, please refere additional STEP 0.1
+`It is supposed that the FS has been created, if not, please refere additional STEP 0.1`
 
 After the file system created, copy the fs to our device
 
@@ -57,7 +57,7 @@ First we setup a couple of symlinks, they are packed into one file
 w4118@w4118:~/hmwk6-prog$ ./loop.sh
 ```
 
-If we do not have hmwk6 directory we need below additional step to create one
+`If we do not have hmwk6 directory we need below additional step to create one`
 
 ```
 w4118@w4118:~/hmwk6-prog$ adb shell mkdir /data/misc/hmwk6
@@ -82,7 +82,7 @@ root@flo:/data/misc/ # ./gpsd
 
 ### 8. Run Tests
 
-It is supposed that there already are some files and directories in out FS, if not, please refer additional STEP 0.2
+`It is supposed that there already are some files and directories in out FS, if not, please refer additional STEP 0.2`
 
 Use file_loc to test
 
