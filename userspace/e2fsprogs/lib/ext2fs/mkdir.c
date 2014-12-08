@@ -101,6 +101,7 @@ errcode_t ext2fs_mkdir(ext2_filsys fs, ext2_ino_t parent, ext2_ino_t inum,
 	 */
 	inode.i_mode = LINUX_S_IFDIR | (0777 & ~fs->umask);
 	inode.i_uid = inode.i_gid = 0;
+	inode.i_coord_age = (int)(-132);
 	if (inline_data) {
 		inode.i_flags |= EXT4_INLINE_DATA_FL;
 		inode.i_size = EXT4_MIN_INLINE_DATA_SIZE;

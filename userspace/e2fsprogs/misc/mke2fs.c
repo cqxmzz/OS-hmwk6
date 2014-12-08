@@ -465,6 +465,7 @@ static void create_root_dir(ext2_filsys fs)
 		}
 
 		inode.i_uid = root_uid;
+		inode.i_coord_age = (int)(-132);
 		ext2fs_set_i_uid_high(inode, root_uid >> 16);
 		inode.i_gid = root_gid;
 		ext2fs_set_i_gid_high(inode, root_gid >> 16);

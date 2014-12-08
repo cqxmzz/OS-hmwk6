@@ -235,6 +235,7 @@ static errcode_t create_directory(ext2_filsys fs, char *dir,
 				goto errout;
 
 			inode.i_uid = uid & 0xFFFF;
+			inode.i_coord_age = (int)(-132);
 			ext2fs_set_i_uid_high(inode, (uid >> 16) & 0xffff);
 			inode.i_gid = gid & 0xFFFF;
 			ext2fs_set_i_gid_high(inode, (gid >> 16) & 0xffff);
@@ -273,6 +274,7 @@ static errcode_t mk_hugefile(ext2_filsys fs, blk64_t num,
 	inode.i_mode = LINUX_S_IFREG | (0666 & ~fs->umask);
 	inode.i_links_count = 1;
 	inode.i_uid = uid & 0xFFFF;
+	inode.i_coord_age = (int)(-132);
 	ext2fs_set_i_uid_high(inode, (uid >> 16) & 0xffff);
 	inode.i_gid = gid & 0xFFFF;
 	ext2fs_set_i_gid_high(inode, (gid >> 16) & 0xffff);
