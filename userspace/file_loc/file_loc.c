@@ -3,15 +3,12 @@
 int main(int argc, char **argv)
 {
 	char *path;
-	double lat;
-	double lon;
-	float acc;
 	int ret;
 	struct gps_location loc;
 
 	if (argc != 2)
 		return -EINVAL;
-	path = argc[1];
+	path = argv[1];
 	ret = syscall(379, path, &loc);
 	if (ret < 0) {
 		printf("Error: syscall returned %d\n", ret);
@@ -19,9 +16,9 @@ int main(int argc, char **argv)
 	}
 	else {
 		printf("File: %s\n", path);
-		printf("Latitude: %lf\n", lat);
-		printf("Longitude: %lf\n", lon);
-		printf("Accuracy: %d\n", acc);
+		printf("Latitude: %lf\n", loc.latitude);
+		printf("Longitude: %lf\n", loc.longitude);
+		printf("Accuracy: %f\n", loc.accuracy);
 		printf("Age: %d\n", ret);
 	}
 	return 0;
