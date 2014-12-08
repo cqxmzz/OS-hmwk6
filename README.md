@@ -27,7 +27,7 @@ w4118@w4118:~/hmwk6-prog/utils$ ./update-kernel-ram.sh ../flo-kernel/arch/arm/bo
 
 ### 2. Copy File System
 
-`It is supposed that the FS has been created, if not, please refere additional STEP 0.1`
+`It is supposed that the FS has been created, if not, please refer additional STEP 0.1`
 
 After the file system created, copy the fs to our device
 
@@ -92,7 +92,8 @@ root@flo:/data/misc/ # ./file_loc /data/misc/hmwk6/dir/file1
 root@flo:/data/misc/ # ./file_loc /data/misc/hmwk6/dir/file2
 ```
 
-**Results**
+Results
+-------
 
 | File/Dir  | Raw Output                                                                                                                    | Google Map URL                                        |
 |:----------|:------------------------------------------------------------------------------------------------------------------------------|:------------------------------------------------------|
@@ -100,9 +101,10 @@ root@flo:/data/misc/ # ./file_loc /data/misc/hmwk6/dir/file2
 | dir/file1 | File: /data/misc/hmwk6/dir/file1 <br/> Latitude: 40.806263 <br/> Longitude: -73.963654 <br/> Accuracy: 37.738998 <br/> Age: 1 | https://www.google.com/maps/@40.806263,-73.963654,13z |
 | dir/file2 | File: /data/misc/hmwk6/dir/file2 <br/> Latitude: 40.806263 <br/> Longitude: -73.963654 <br/> Accuracy: 37.738998 <br/> Age: 1 | https://www.google.com/maps/@40.806263,-73.963654,13z |
 
-### 0. Additional Steps
+Additional Steps
+----------------
 
-#### 0.1 Create File System
+### 0.1 Create File System
 
 If it is the first time testing, we need to create a new modified ext3 file system
 
@@ -113,7 +115,7 @@ w4118@w4118:~/hmwk6-prog$ sudo ./userspace/e2fsprogs/misc/mke2fs -I 256 -t ext3 
 w4118@w4118:~/hmwk6-prog$ sudo losetup -d /dev/loop0
 ```
 
-#### 0.2 Create Some Files and Directories in The FS
+### 0.2 Create Some Files and Directories in The FS
 
 Create some files
 
