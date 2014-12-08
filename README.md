@@ -1,12 +1,16 @@
 About
 -----
 
+---
+
 This document will walk you through test processes step-by-step.
 
 Written by team1 :family: with :heart:.
 
 Test Steps
 ----------
+
+---
 
 ### 1. Compile and Boot Device
 
@@ -95,6 +99,8 @@ root@flo:/data/misc/ # ./file_loc /data/misc/hmwk6/dir/file2
 Results
 -------
 
+---
+
 | File/Dir  | Raw Output                                                                                                                    | Google Map URL                                        |
 |:----------|:------------------------------------------------------------------------------------------------------------------------------|:------------------------------------------------------|
 | dir       | File: /data/misc/hmwk6/dir <br/> Latitude: 40.806275 <br/> Longitude: -73.963655 <br/> Accuracy: 38.751999 <br/> Age: 0       | https://www.google.com/maps/@40.806275,-73.963655,13z |
@@ -103,6 +109,8 @@ Results
 
 Additional Steps
 ----------------
+
+---
 
 ### 0.1 Create File System
 
