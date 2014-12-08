@@ -19,26 +19,27 @@
 void daemon_mode()
 {
 	pid_t pid;
-	if((pid = fork()) < 0) {
+	pid = fork();
+	if (pid < 0) {
 		perror("Fail fork");
 		exit(EXIT_FAILURE);
 	}
 
-	if(pid > 0)
+	if (pid > 0)
 		exit(EXIT_SUCCESS);
 
-	if(setsid() < 0) {
+	if (setsid() < 0) {
 		perror("Fail to setsid");
 		exit(EXIT_FAILURE);
 	}
 
-	if((pid = fork()) < 0) {
+	pid = fork();
+	if (pid < 0) {
                 perror("Fail fork");
                 exit(EXIT_FAILURE);
         }
-
-        if(pid > 0)
-                exit(EXIT_SUCCESS);
+	if (pid > 0)
+		exit(EXIT_SUCCESS);
 
 	close(0);
 	close(1);
@@ -56,7 +57,7 @@ static int poll_gps_data()
 	char line[LINE_SIZE];
 	int place = 0;
 	fp = fopen(GPS_LOCATION_FILE, "r");
-	if(fp == NULL)
+	if (fp == NULL)
 		return EXIT_FAILURE;
 	while (fgets(line, sizeof(line), fp)) {
 		if (place == 0)
@@ -66,7 +67,7 @@ static int poll_gps_data()
 		else if (place == 2)
 			data.accuracy = atof(line);
 		place++;
-		if (place > 3) 
+		if (place > 3)
 			break;
 	}
 	fclose(fp);
@@ -77,7 +78,7 @@ static int poll_gps_data()
 int main(int argc, char *argv[])
 {
 	daemon_mode();
-	while(1) {
+	while (1) {
 		poll_gps_data();
 		usleep(1000000);
 	}

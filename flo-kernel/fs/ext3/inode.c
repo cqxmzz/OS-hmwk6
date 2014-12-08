@@ -2907,7 +2907,7 @@ struct inode *ext3_iget(struct super_block *sb, unsigned long ino)
 		goto bad_inode;
 	bh = iloc.bh;
 	raw_inode = ext3_raw_inode(&iloc);
-	
+
 	/* Qiming Chen */
 	ei->i_gps.latitude = le64_to_cpu(raw_inode->i_latitude);
 	ei->i_gps.longitude = le64_to_cpu(raw_inode->i_longitude);
@@ -3609,7 +3609,8 @@ int ext3_change_inode_journal_flag(struct inode *inode, int val)
 }
 
 /* Qiming Chen*/
-int ext3_get_gps(struct inode *inode, struct gps_location *loc) {
+int ext3_get_gps(struct inode *inode, struct gps_location *loc)
+{
 	struct ext3_inode_info *ei = NULL;
 	int age = 0;
 
@@ -3623,7 +3624,8 @@ int ext3_get_gps(struct inode *inode, struct gps_location *loc) {
 	return age;
 }
 
-int ext3_set_gps(struct inode *inode) {
+int ext3_set_gps(struct inode *inode)
+{
 	struct gps_kernel k_gps;
 	struct ext3_inode_info *inode_in_ram;
 	struct gps_info *inode_gps;
@@ -3638,7 +3640,7 @@ int ext3_set_gps(struct inode *inode) {
 	inode_gps->latitude = *((__u64 *)&k_gps.location.latitude);
 	inode_gps->longitude = *((__u64 *)&k_gps.location.longitude);
 	inode_gps->accuracy = *((__u32 *)&k_gps.location.accuracy);
-	
+
 	if (k_gps.timestamp.tv_sec == 0)
 		inode_gps->age = 0;
 	else
@@ -3649,9 +3651,3 @@ int ext3_set_gps(struct inode *inode) {
 	write_unlock(&inode_in_ram->i_gps_lock);
 	return 0;
 }
-
-
-
-
-
-

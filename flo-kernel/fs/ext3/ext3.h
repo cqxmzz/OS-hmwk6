@@ -310,7 +310,7 @@ struct ext3_inode {
 	} osd2;				/* OS dependent 2 */
 	__le16	i_extra_isize;
 	__le16	i_pad1;
-	
+
 	/* Qiming Chen */
 	__le64 i_latitude;
 	__le64 i_longitude;

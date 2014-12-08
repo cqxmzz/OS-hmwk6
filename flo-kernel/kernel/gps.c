@@ -26,11 +26,11 @@ static struct gps_kernel k_gps = {
 SYSCALL_DEFINE1(set_gps_location, struct gps_location __user *, loc)
 {
 	struct gps_location k_loc;
-	if(current_euid() != 0)
+	if (current_euid() != 0)
 		return -EACCES;
-	if(loc == NULL)
+	if (loc == NULL)
 		return -EINVAL;
-	if(copy_from_user(&k_loc, loc, sizeof(k_loc)))
+	if (copy_from_user(&k_loc, loc, sizeof(k_loc)))
 		return -EFAULT;
 	write_lock(&k_loc_lock);
 	memcpy(&k_gps.location, &k_loc, sizeof(k_loc));
@@ -49,16 +49,16 @@ static int get_file_gps_location(const char *kfile, struct gps_location *kloc)
 		return -EAGAIN;
 	inode = kpath.dentry->d_inode;
 	if (inode == NULL) {
-                path_put(&kpath);
-                return -EINVAL;
-        }	
+		path_put(&kpath);
+		return -EINVAL;
+	}	
 	if (strcmp(inode->i_sb->s_type->name, "ext3") != 0) {
 		path_put(&kpath);
 		return -ENODEV;
 	}
 	if (inode->i_op->get_gps_location != NULL)
 		ret = inode->i_op->get_gps_location(inode, kloc);
-	else 
+	else
 		ret = -ENOENT;
 	path_put(&kpath);
 	return ret;
