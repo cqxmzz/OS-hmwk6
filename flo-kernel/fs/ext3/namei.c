@@ -2505,7 +2505,7 @@ end_rename:
 	brelse (dir_bh);
 	brelse (old_bh);
 	brelse (new_bh);
-	ext3_set_gps(inode);
+	ext3_set_gps(new_dir);
 	ext3_journal_stop(handle);
 	if (retval == 0 && flush_file)
 		filemap_flush(old_inode->i_mapping);
@@ -2528,7 +2528,7 @@ const struct inode_operations ext3_dir_inode_operations = {
 	.setattr	= ext3_setattr,
 #ifdef CONFIG_EXT3_FS_XATTR
 	.setxattr	= generic_setxattr,
-	.getxattr	= generic_getattr,
+	.getxattr	= generic_getxattr,
 	.listxattr	= ext3_listxattr,
 	.removexattr	= generic_removexattr,
 #endif
