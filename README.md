@@ -7,7 +7,7 @@ This document will walk you through test processes step-by-step.
 
 Written by team1 :family: with :heart:.
 
-Follow Markdown syntax, read online for better user experience: https://os1.cs.columbia.edu/team1/hmwk6-prog/tree/master
+Follow Markdown syntax, please read online for better user experience: https://os1.cs.columbia.edu/team1/hmwk6-prog/tree/master
 
 Test Steps
 ----------
