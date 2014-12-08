@@ -1,9 +1,9 @@
 About
 -----
 
-This document will walk you through test process step-by-step.
+This document will walk you through test processes step-by-step.
 
-Written by team1 :family: with :heart:
+Written by team1 :family: with :heart:.
 
 Test Steps
 ----------
@@ -19,20 +19,15 @@ w4118@w4118:~/hmwk6-prog/flo-kernel$ make ARCH=arm CROSS_COMPILE=arm-eabi-
 
 In our repository's utils directory, run update-kernel-ram.sh
 
+adb reboot bootloader
+
 ```
 w4118@w4118:~/hmwk6-prog/utils$ ./update-kernel-ram.sh ../flo-kernel/arch/arm/boot/zImage
 ```
 
-### 2. Create File System
+### 2. Copy File System
 
-If it is the first time testing, we need to create a new modified ext3 file system
-
-```
-w4118@w4118:~/hmwk6-prog$ dd if=/dev/zero of=hmwk6.fs bs=1M count=2
-w4118@w4118:~/hmwk6-prog$ sudo losetup /dev/loop0 hmwk6.fs
-w4118@w4118:~/hmwk6-prog$ sudo ./userspace/e2fsprogs/misc/mke2fs -I 256 -t ext3 -L w4118.hmwk6 /dev/loop0
-w4118@w4118:~/hmwk6-prog$ sudo losetup -d /dev/loop0
-```
+It is supposed that the FS has been created, if not, please refere additional STEP 0.1
 
 After the file system created, copy the fs to our device
 
@@ -59,10 +54,10 @@ w4118@w4118:~/hmwk6-prog/userspace/file_loc$ adb push file_loc /data/misc
 First we setup a couple of symlinks, they are packed into one file
 
 ```
-w4118@w4118:~/hmwk6-prog$ ./slloop.sh
+w4118@w4118:~/hmwk6-prog$ ./loop.sh
 ```
 
-If we do not have hmwk6 directory we need below additional step to create one)
+If we do not have hmwk6 directory we need below additional step to create one
 
 ```
 w4118@w4118:~/hmwk6-prog$ adb shell mkdir /data/misc/hmwk6
@@ -71,42 +66,61 @@ w4118@w4118:~/hmwk6-prog$ adb shell mkdir /data/misc/hmwk6
 Now we can mount the fs
 
 ```
-w4118@w4118:~/hmwk6-prog$ adb push hmwk6.fs /data/misc
 w4118@w4118:~/hmwk6-prog$ adb shell
-# mount -o loop -t ext3 /data/misc/hmwk6.fs /data/misc/hmwk6
+root@flo:/ # mount -o loop -t ext3 /data/misc/hmwk6.fs /data/misc/hmwk6
 ```
 
-### 6. Start the GPS Daemon
+### 6. Launch the GPSLocator
+
+Simply tap the GPSLocator icon in the Nexus 7, that's it.
+
+### 7. Start the GPS Daemon
 
 ```
-w4118@w4118:~/hmwk6-prog$ adb shell /data/misc/gpsd
+root@flo:/data/misc/ # ./gpsd
 ```
 
-### 7. Run Tests
+### 8. Run Tests
+
+It is supposed that there already are some files and directories in out FS, if not, please refer additional STEP 0.2
+
+Use file_loc to test
+
+```
+root@flo:/data/misc/ # ./file_loc /data/misc/hmwk6/dir
+root@flo:/data/misc/ # ./file_loc /data/misc/hmwk6/dir/file1
+root@flo:/data/misc/ # ./file_loc /data/misc/hmwk6/dir/file2
+```
+
+**Results**
+
+| File/Dir  | Raw Output                                                                                                                    | Google Map URL                                        |
+|:----------|:------------------------------------------------------------------------------------------------------------------------------|:------------------------------------------------------|
+| dir       | File: /data/misc/hmwk6/dir <br/> Latitude: 40.806275 <br/> Longitude: -73.963655 <br/> Accuracy: 38.751999 <br/> Age: 0       | https://www.google.com/maps/@40.806275,-73.963655,13z |
+| dir/file1 | File: /data/misc/hmwk6/dir/file1 <br/> Latitude: 40.806263 <br/> Longitude: -73.963654 <br/> Accuracy: 37.738998 <br/> Age: 1 | https://www.google.com/maps/@40.806263,-73.963654,13z |
+| dir/file2 | File: /data/misc/hmwk6/dir/file2 <br/> Latitude: 40.806263 <br/> Longitude: -73.963654 <br/> Accuracy: 37.738998 <br/> Age: 1 | https://www.google.com/maps/@40.806263,-73.963654,13z |
+
+### 0. Additional Steps
+
+#### 0.1 Create File System
+
+If it is the first time testing, we need to create a new modified ext3 file system
+
+```
+w4118@w4118:~/hmwk6-prog$ dd if=/dev/zero of=hmwk6.fs bs=1M count=2
+w4118@w4118:~/hmwk6-prog$ sudo losetup /dev/loop0 hmwk6.fs
+w4118@w4118:~/hmwk6-prog$ sudo ./userspace/e2fsprogs/misc/mke2fs -I 256 -t ext3 -L w4118.hmwk6 /dev/loop0
+w4118@w4118:~/hmwk6-prog$ sudo losetup -d /dev/loop0
+```
+
+#### 0.2 Create Some Files and Directories in The FS
 
 Create some files
 
 ```
 w4118@w4118:~/hmwk6-prog$ adb shell
-# cd /data/misc/hmwk6
-# touch file1
-# touch file2
-# mkdir dir1
+root@flo:/ # cd /data/misc/hmwk6
+root@flo:/data/misc/hmwk6/ # mkdir dir
+root@flo:/data/misc/hmwk6/dir/ # touch file1
+root@flo:/data/misc/hmwk6/dir/ # touch file2
 ```
-
-Use file_loc to test
-
-```
-w4118@w4118:~/hmwk6-prog$ adb shell
-# cd /data/misc
-# ./file_loc /data/misc/hmwk6/file1
-# ./file_loc /data/misc/hmwk6/file2
-# ./file_loc /data/misc/hmwk6/dir1
-```
-
-**Results**
-
-| File/Dir | Raw Output |
-|:--------:|:----------:|
-|  file1   |   adsda    |
-|  file2   |   adsadd   |
