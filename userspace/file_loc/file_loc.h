@@ -8,6 +8,10 @@
  * Homework 6 - Geo Tagged File System
  */
 #include <sys/syscall.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <errno.h>
 
 struct gps_location {
 	double latitude;

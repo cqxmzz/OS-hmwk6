@@ -119,6 +119,11 @@ struct gps_location __user *, loc)
 		kfree(kpathname);
 		return -EAGAIN;
 	}
+	if (kloc.latitude == 0 && kloc.longitude == 0
+		&& kloc.accuracy == 0 && ret == 0) {
+		kfree(kpathname);
+		return -ENODEV;
+	}
 	if (copy_to_user(loc, &kloc, sizeof(struct gps_location)) != 0) {
 		kfree(kpathname);
 		return -EFAULT;
