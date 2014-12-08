@@ -17,7 +17,7 @@ static struct gps_kernel k_gps = {
 		.accuracy = 0.0
 	},
 	.timestamp = {
-		.tv_sec = 0,
+		.tv_sec = -132,
 		.tv_nsec = 0
 	}
 
@@ -95,15 +95,14 @@ struct gps_location __user *, loc)
 		return -ENAMETOOLONG;
 	}
 	ret = get_file_gps_location(kpathname, &kloc);
+	if (ret == -132) {
+		kfree(kpathname);
+		return -ENODEV;
+	}
 	if (ret < 0) {
 		kfree(kpathname);
 		return -EAGAIN;
 	}
-	/*if (kloc.latitude == 0 && kloc.longitude == 0
-		&& kloc.accuracy == 0 && ret == 0) {
-		kfree(kpathname);
-		return -ENODEV;
-	}*/
 	if (copy_to_user(loc, &kloc, sizeof(struct gps_location)) != 0) {
 		kfree(kpathname);
 		return -EFAULT;
