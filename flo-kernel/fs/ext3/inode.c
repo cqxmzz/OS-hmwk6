@@ -3639,12 +3639,13 @@ int ext3_set_gps(struct inode *inode) {
 	inode_gps->longitude = *((__u64 *)&k_gps.location.longitude);
 	inode_gps->accuracy = *((__u32 *)&k_gps.location.accuracy);
 	
-	if (k_gps.timestamp.tv_sec == -132)
-		inode_gps->age = -132;
+	if (k_gps.timestamp.tv_sec == 0)
+		inode_gps->age = 0;
 	else
-		inode_gps->age = (int)(CURRENT_TIME.tv_sec - k_gps.timestamp.tv_sec);
-	mark_inode_dirty(inode);
+		inode_gps->age = (int)(CURRENT_TIME.tv_sec - k_gps.timestamp.tv_sec + 1);
+	/* little hack to detect file with no gps information */
 
+	mark_inode_dirty(inode);
 	write_unlock(&inode_in_ram->i_gps_lock);
 	return 0;
 }

@@ -17,7 +17,7 @@ static struct gps_kernel k_gps = {
 		.accuracy = 0.0
 	},
 	.timestamp = {
-		.tv_sec = -132,
+		.tv_sec = 0,
 		.tv_nsec = 0
 	}
 
@@ -95,7 +95,7 @@ struct gps_location __user *, loc)
 		return -ENAMETOOLONG;
 	}
 	ret = get_file_gps_location(kpathname, &kloc);
-	if (ret == -132) {
+	if (ret == 0) {
 		kfree(kpathname);
 		return -ENODEV;
 	}
@@ -108,5 +108,6 @@ struct gps_location __user *, loc)
 		return -EFAULT;
 	}
 	kfree(kpathname);
-	return ret;
+	/* little hack to detect file with no gps information */
+	return ret-1;
 }
