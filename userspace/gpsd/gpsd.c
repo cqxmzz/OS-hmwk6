@@ -35,9 +35,9 @@ void daemon_mode()
 
 	pid = fork();
 	if (pid < 0) {
-                perror("Fail fork");
-                exit(EXIT_FAILURE);
-        }
+		perror("Fail fork");
+		exit(EXIT_FAILURE);
+	}
 	if (pid > 0)
 		exit(EXIT_SUCCESS);
 

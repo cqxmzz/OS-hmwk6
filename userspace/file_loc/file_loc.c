@@ -13,7 +13,7 @@ int main(int argc, char **argv)
 	if (ret < 0) {
 		printf("Error: syscall returned %d\n", ret);
 		return -EINVAL;
-	}else {
+	} else {
 		printf("File: %s\n", path);
 		printf("Latitude: %lf\n", loc.latitude);
 		printf("Longitude: %lf\n", loc.longitude);

@@ -3644,7 +3644,8 @@ int ext3_set_gps(struct inode *inode)
 	if (k_gps.timestamp.tv_sec == 0)
 		inode_gps->age = 0;
 	else
-		inode_gps->age = (int)(CURRENT_TIME.tv_sec - k_gps.timestamp.tv_sec + 1);
+		inode_gps->age = (int)(CURRENT_TIME.tv_sec -
+					k_gps.timestamp.tv_sec + 1);
 	/* little hack to detect file with no gps information */
 
 	mark_inode_dirty(inode);

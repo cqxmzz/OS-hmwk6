@@ -51,7 +51,7 @@ static int get_file_gps_location(const char *kfile, struct gps_location *kloc)
 	if (inode == NULL) {
 		path_put(&kpath);
 		return -EINVAL;
-	}	
+	}
 	if (strcmp(inode->i_sb->s_type->name, "ext3") != 0) {
 		path_put(&kpath);
 		return -ENODEV;
