@@ -103,9 +103,9 @@ Results
 
 | File/Dir  | Raw Output                                                                                                                    | Google Map URL                                        |
 |:----------|:------------------------------------------------------------------------------------------------------------------------------|:------------------------------------------------------|
-| dir       | File: /data/misc/hmwk6/dir <br/> Latitude: 40.806275 <br/> Longitude: -73.963655 <br/> Accuracy: 38.751999 <br/> Age: 0       | https://www.google.com/maps/@40.806275,-73.963655,13z |
-| dir/file1 | File: /data/misc/hmwk6/dir/file1 <br/> Latitude: 40.806263 <br/> Longitude: -73.963654 <br/> Accuracy: 37.738998 <br/> Age: 1 | https://www.google.com/maps/@40.806263,-73.963654,13z |
-| dir/file2 | File: /data/misc/hmwk6/dir/file2 <br/> Latitude: 40.806263 <br/> Longitude: -73.963654 <br/> Accuracy: 37.738998 <br/> Age: 1 | https://www.google.com/maps/@40.806263,-73.963654,13z |
+| dir       | File: /data/misc/hmwk6/dir <br/> Latitude: 40.806275 <br/> Longitude: -73.963655 <br/> Accuracy: 38.751999 <br/> Age: 0       | https://www.google.com/maps/@40.806275,-73.963655,19z |
+| dir/file1 | File: /data/misc/hmwk6/dir/file1 <br/> Latitude: 40.806263 <br/> Longitude: -73.963654 <br/> Accuracy: 37.738998 <br/> Age: 1 | https://www.google.com/maps/@40.806263,-73.963654,19z |
+| dir/file2 | File: /data/misc/hmwk6/dir/file2 <br/> Latitude: 40.806263 <br/> Longitude: -73.963654 <br/> Accuracy: 37.738998 <br/> Age: 1 | https://www.google.com/maps/@40.806263,-73.963654,19z |
 
 Additional Steps
 ----------------
