@@ -19,7 +19,7 @@ w4118@w4118:~/hmwk6-prog/flo-kernel$ make ARCH=arm CROSS_COMPILE=arm-eabi-
 
 In our repository's utils directory, run update-kernel-ram.sh
 
-adb reboot bootloader
+To enter fastboot mode, run: `adb reboot bootloader`
 
 ```
 w4118@w4118:~/hmwk6-prog/utils$ ./update-kernel-ram.sh ../flo-kernel/arch/arm/boot/zImage
